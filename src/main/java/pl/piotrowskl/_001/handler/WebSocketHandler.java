@@ -10,18 +10,29 @@ import java.util.Set;
 
 public class WebSocketHandler extends TextWebSocketHandler {
     private static Set<WebSocketSession> sessions = new HashSet<>();
+    private static int clickCounter = 0;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
+        session.sendMessage(new TextMessage("Counter: " + clickCounter));
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        for (WebSocketSession s : sessions){
-            s.sendMessage(new TextMessage("User" + session.getId() + " " + payload));
+        if (payload.equals("increment")){
+            clickCounter++;
+            for (WebSocketSession s : sessions){
+                s.sendMessage(new TextMessage("Counter: " + clickCounter));
+            }
+        }else {
+            for (WebSocketSession s : sessions){
+                s.sendMessage(new TextMessage("User" + session.getId() + " " + payload));
+            }
         }
+
+
     }
 
     @Override

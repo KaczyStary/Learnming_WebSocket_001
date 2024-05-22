@@ -9,11 +9,25 @@
                 ws = new WebSocket('ws://localhost:9000/ws')
                 ws.onmessage = function(data){
                     document.getElementById('messages').innerHTML += '<br>' + data.data;
+                    if (data.data.startsWith("Counter: ")){
+                        document.getElementById('counter').innerText = data.data;
+                    }
                 }
             }
             function sendMessage(){
+                if (!ws || ws.readyState !== WebSocket.OPEN){
+                    alert('You must connect first!');
+                    return;
+                }
                 var message = document.getElementById('message').value;
                 ws.send(message);
+            }
+            function incrementCounter(){
+                if (!ws || ws.readyState !== WebSocket.OPEN){
+                    alert('You must connect first!');
+                    return;
+                }
+                ws.send("increment");
             }
         </script>
     </head>
@@ -23,6 +37,8 @@
         <br>
         <input type="text" id="message">
         <button onclick="sendMessage()">Send</button>
+        <button onclick="incrementCounter()">Increment Counter</button>
+        <div id="counter">Counter: 0</div>
         <div id="messages"></div>
     </body>
 </html>
