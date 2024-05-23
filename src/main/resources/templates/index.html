@@ -32,6 +32,9 @@
                 }
                 ws.send("increment");
             }
+            window.onload = function(){
+                connect();
+            }
         </script>
     </head>
     <body>
@@ -47,7 +50,6 @@
                     Logged in as: <span th:text="${#authentication.name}">Anonymous</span>
                 </p>
             </div>
-            <button onclick="connect()">Connect</button>
             <br>
             <input type="text" id="message">
             <button onclick="sendMessage()">Send</button>
