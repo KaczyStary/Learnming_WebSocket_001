@@ -37,7 +37,9 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .formLogin(withDefaults())
-                .logout(LogoutConfigurer::permitAll)
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
+                        .logoutSuccessUrl("/")
+                        .permitAll())
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(toH2Console())
                         .disable()

@@ -2,7 +2,7 @@
 <html th:fragment="html" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
+ lang="en">
     <head>
         <meta charset="UTF-8">
         <title>WebSocket Test</title>
@@ -37,17 +37,16 @@
     <body>
         <div>
             <h1>WebSocket Test</h1>
-            <div sec:authorize="!principal.getUsername().isEmpty()"></div>
-            <div sec:authorize="isAnonymous()">
-                <span th:text="ann"></span>
+            <div class="d-flex" sec:authorize="isAnonymous()">
+                <p>
+                    Logged in as: <span th:text="${#authentication.name}">Anonymous</span>
+                </p>
             </div>
-            <div sec:authorize="isAuthenticated()">
-                Authenticated username:
-                <div sec:authentication="name"></div>
-                Authenticated user's firstName:
-                <div sec:authentication="principal.getUsername()"></div>
+            <div class="d-flex" sec:authorize="isAuthenticated()">
+                <p>
+                    Logged in as: <span th:text="${#authentication.name}">Anonymous</span>
+                </p>
             </div>
-
             <button onclick="connect()">Connect</button>
             <br>
             <input type="text" id="message">
