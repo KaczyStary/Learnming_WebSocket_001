@@ -32,17 +32,18 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-            String payload = message.getPayload();
-            if (payload.equals("increment")){
-                clickCounter++;
-                for (WebSocketSession s : sessions){
-                    s.sendMessage(new TextMessage("Counter: " + clickCounter));
-                }
-            }else {
-                for (WebSocketSession s : sessions) {
-                    s.sendMessage(new TextMessage(session.getPrincipal() + ": " + payload));
-                }
+
+        String payload = message.getPayload();
+        if (payload.equals("increment")){
+            clickCounter++;
+            for (WebSocketSession s : sessions){
+                s.sendMessage(new TextMessage("Counter: " + clickCounter));
             }
+        }else {
+            for (WebSocketSession s : sessions) {
+                s.sendMessage(new TextMessage( ": " + payload));
+            }
+        }
 
     }
 

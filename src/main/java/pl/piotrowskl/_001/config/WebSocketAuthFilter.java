@@ -6,8 +6,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 public class WebSocketAuthFilter implements HandshakeInterceptor {
@@ -15,12 +17,13 @@ public class WebSocketAuthFilter implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         URI uri = request.getURI();
-        String token = getQueryParam(uri, "token");
+        List<String> queryParams = UriComponentsBuilder.fromUri(uri).build().getQueryParams().get("token");
+        String token = queryParams != null && !queryParams.isEmpty() ? queryParams.get(0) : null;
+
         if (token != null) {
-            // Verify the token and get the authentication object
             Authentication auth = authenticateToken(token);
             if (auth != null) {
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                attributes.put("auth", auth);
             }
         }
         return true;
