@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html th:fragment="html" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
     <head>
         <meta charset="UTF-8">
         <title>WebSocket Test</title>
@@ -32,13 +35,27 @@
         </script>
     </head>
     <body>
-        <h1>WebSocket Test</h1>
-        <button onclick="connect()">Connect</button>
-        <br>
-        <input type="text" id="message">
-        <button onclick="sendMessage()">Send</button>
-        <button onclick="incrementCounter()">Increment Counter</button>
-        <div id="counter">Counter: 0</div>
-        <div id="messages"></div>
+        <div>
+            <h1>WebSocket Test</h1>
+            <div sec:authorize="!principal.getUsername().isEmpty()"></div>
+            <div sec:authorize="isAnonymous()">
+                <span th:text="ann"></span>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                Authenticated username:
+                <div sec:authentication="name"></div>
+                Authenticated user's firstName:
+                <div sec:authentication="principal.getUsername()"></div>
+            </div>
+
+            <button onclick="connect()">Connect</button>
+            <br>
+            <input type="text" id="message">
+            <button onclick="sendMessage()">Send</button>
+            <button onclick="incrementCounter()">Increment Counter</button>
+            <div id="counter">Counter: 0</div>
+            <div id="messages"></div>
+        </div>
+
     </body>
 </html>
